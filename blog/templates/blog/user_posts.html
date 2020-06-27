@@ -1,0 +1,32 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        <div class="media">
+        <img class="rounded-circle account-img" src="{{ author.profile.image.url }}">
+        <div class="media-body">
+            <h2 class="account-heading">{{ author.username }}</h2>
+            {% if request.user.is_authenticated and request.user == author %}
+                <p class="text-secondary">{{ author.email }}</p>
+                <p class="text-info">Only you can see your email address</p>
+            {% endif %}
+        </div>
+        </div>
+        <br><br>
+        <!--We have passed a posts list of the author and the author that has been requested(argument by url)-->
+        {% if request.user.is_authenticated and request.user == author %}
+            <div>
+                <h2 class="d-inline">My Posts ({{ page_obj.paginator.count }})</h2>
+                <a class="btn btn-outline-info float-right" href="{% url 'post-create' %}" >+ New Post</a>
+             </div>
+        {% else %}
+            <div>
+                <h2 class="d-inline">{{ author.username }}'s Posts ({{ page_obj.paginator.count }})</h2>
+            </div>
+        {% endif %}
+        <hr>
+        <br><br>
+        
+        {% include 'blog/list_snippets.html' %}
+    </div>
+{% endblock content %}

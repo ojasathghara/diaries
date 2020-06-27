@@ -1,0 +1,47 @@
+{% for post in posts %}
+    <article class="media content-section">
+        <img class="rounded-circle article-img", src="{{ post.author.profile.image.url }}">
+        <div class="media-body">
+        <div class="article-metadata">
+            <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
+            <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+            
+            {% if request.user.is_authenticated and request.user == post.author %}
+                <div class="my-2">
+                    <a href="{% url 'post-update' post.id %}" class="btn btn-sm btn-info">Edit</a>
+                    <a href="{% url 'post-delete' post.id %}" class="btn btn-sm btn-danger ml-2">Delete</a>
+                </div>
+            {% endif %}
+
+        </div>
+            <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>   <!--post.id is the variable to be passed to route, see urls.py-->
+            <p class="article-content">
+                {% ifnotequal post.content post.content|truncatewords:"50" %}
+                    {{ post.content|truncatewords:"50" }}
+                    <a href="{% url 'post-detail' post.id %}" class="float-right" >More...</a>
+                {% else %}
+                    {{ post.content }}
+                {% endifnotequal %}
+            </p>
+        </div>
+    </article>
+{% endfor %}
+{% if is_paginated %}
+    {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info mb-4" href="{% url 'blog-home' %}"> << First </a>
+        <a class="btn btn-outline-info mb-4" href="{% url 'blog-home' %}?page={{ page_obj.previous_page_number }}"> < Previous </a>
+    {% endif %}
+    
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+            <a class="btn btn-info mb-4" href="{% url 'blog-home' %}?page={{ num }}"> {{ num }} </a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a class="btn btn-outline-info mb-4" href="{% url 'blog-home' %}?page={{ num }}"> {{ num }} </a>
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        <a class="btn btn-outline-info mb-4" href="{% url 'blog-home' %}?page={{ page_obj.next_page_number }}"> Next > </a>
+        <a class="btn btn-outline-info mb-4" href="{% url 'blog-home' %}?page={{ page_obj.paginator.num_pages }}"> Last >> </a>
+    {% endif %}
+{% endif %}

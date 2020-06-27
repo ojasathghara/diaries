@@ -1,0 +1,6 @@
+venv
+db.sqlite3
+fake_posts.json
+populate_posts.py
+notes.txt
+__pycache__
