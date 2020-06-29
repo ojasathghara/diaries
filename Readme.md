@@ -13,7 +13,7 @@
 ## Notes for developers:
 
 ### Tech Stack
-- Django 2.1 on Python 3.6.9. (See installed app versions in requirements.txt)
+- Django 3.0 on Python 3.6.9. (See installed app versions in requirements.txt)
 - HTML, CSS and Bootstrap 4.
 - Crispy forms for forms customizations
 
